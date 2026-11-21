@@ -1,7 +1,7 @@
 // The pure parts: file classification, line endings, conflict states, paths.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { classify, toDisk, diskState, fullPath, baseName, MAX_SHOWN } from "../mods/files-edit/edit.js";
+import { classify, toDisk, diskState, fullPath, baseName, markKey, MAX_SHOWN } from "../mods/files-edit/edit.js";
 
 test("plain text is editable and keeps LF", () => {
   const v = classify("a\nb\n");
@@ -57,4 +57,12 @@ test("fullPath", () => {
   assert.equal(fullPath("/home/me/proj/", "a"), "/home/me/proj/a");
   assert.equal(baseName("C:\\a\\b.txt"), "b.txt");
   assert.equal(baseName("/a/b/"), "b");
+});
+
+test("a git mark's key is the same for git's slashes and a Windows pane's backslashes", () => {
+  assert.equal(markKey("C:/Users/me/proj/notes.md"), "c:/Users/me/proj/notes.md");
+  assert.equal(markKey("C:\\Users\\me\\proj/notes.md"), "c:/Users/me/proj/notes.md");
+  assert.equal(markKey("c:\\Users\\me\\proj/src/a.js"), markKey("C:/Users/me/proj/src/a.js"));
+  // Other systems keep their paths, a backslash in a file name included.
+  assert.equal(markKey("/home/me/we\\ird.txt"), "/home/me/we\\ird.txt");
 });

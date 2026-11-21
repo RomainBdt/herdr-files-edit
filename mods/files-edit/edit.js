@@ -46,6 +46,13 @@ export function fullPath(root, rel, { windows = false } = {}) {
   return rel ? `${base}\\${rel.replaceAll("/", "\\")}` : root.replaceAll("/", "\\");
 }
 
+/** The key a git mark is stored and looked up under. `git rev-parse --show-toplevel` answers with slashes
+ *  (C:/Users/me/proj) while a Windows pane's folder has backslashes (C:\Users\me\proj), so a Windows path is
+ *  written with slashes and a lowercase drive letter on both sides. Anything else is left as it is. */
+export function markKey(path) {
+  return /^[A-Za-z]:[\\/]/.test(path) ? path[0].toLowerCase() + path.slice(1).replaceAll("\\", "/") : path;
+}
+
 /** The last part of a path, for messages. */
 export function baseName(path) {
   return path.split(/[\\/]/).filter(Boolean).pop() ?? path;

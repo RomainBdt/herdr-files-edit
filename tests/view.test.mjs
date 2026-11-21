@@ -32,7 +32,7 @@ const texts = view => walk(view.render(context())).flatMap(n => n.kids.filter(k 
 async function folder(files = {}) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "files-edit-"));
   for (const [name, content] of Object.entries(files)) await fs.writeFile(path.join(dir, name), content);
-  Object.assign(globalThis.__fake, { cwd: dir, machine: null, platform: "windows", reads: 0, writes: 0, states: [],
+  Object.assign(globalThis.__fake, { cwd: dir, machine: null, git: null, platform: "windows", reads: 0, writes: 0, states: [],
     listing: Object.keys(files).map(name => ({ name, dir: false })).concat([{ name: "sub", dir: true }]) });
   return dir;
 }
@@ -283,4 +283,12 @@ test("Ctrl+S saves", async () => {
   root.hd.key({ key: "s", modifiers: { control: true, alt: false, shift: false, platform: false } }, cx);
   await cx.settle();
   assert.equal(await read(dir, "a.txt"), "two\n");
+});
+
+test("git marks show on a Windows folder, where git answers with slashes and the pane has backslashes", async () => {
+  await folder({ "a.txt": "hi", "b.txt": "yo" });
+  Object.assign(globalThis.__fake, { cwd: "C:\\Users\\me\\proj", git: { top: "C:/Users/me/proj", status: "?? a.txt\0 M b.txt\0" } });
+  const { view } = await start();
+  const marks = walk(view.render(context())).filter(n => n.tag === "div" && n.kids.length === 1 && (n.kids[0] === "A" || n.kids[0] === "M")).map(n => n.kids[0]);
+  assert.deepEqual(marks, ["A", "M"]);
 });

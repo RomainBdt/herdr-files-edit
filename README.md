@@ -8,6 +8,8 @@ limits and look, and adds two things:
 - **Right-click to copy a path.** Right-click a file or a folder in the tree and its
   full path goes to the clipboard.
 
+![Files Edit in Herdr's side panel: a folder tree with the green A mark on a new file](preview.png)
+
 It is a native Herdr mod (no web view). It's based on Herdr's built-in Files mod, which
 it leaves alone: both can be installed together, and you choose which one a layout shows.
 
@@ -16,7 +18,8 @@ it leaves alone: both can be installed together, and you choose which one a layo
 - **The tree.** As Herdr's Files: the focused pane's folder, folders loaded as you open
   them, `A`/`M`/`D`/`U` marks from `git status`, at most 500 entries per folder and 5,000
   in all (it says so when a list is cut), refreshed every 10 seconds and when the folder
-  changes.
+  changes. On Windows the marks are
+  matched whether the folder is written with slashes (as git does) or backslashes.
 - **Editing.** Click a file to open it in the editor, syntax-colored as before and now
   editable. Save is the button in the header (and Ctrl+S, see Limits).
   - **Unsaved changes show.** The header marks the file `● name · unsaved` and the Save

@@ -12,6 +12,10 @@ export async function exec(command, args) {
   if (command === "powershell") return { code: 0, stdout: JSON.stringify(f().listing ?? []), stderr: "" };
   // The listing script's own format: kind and name, each ended by a NUL.
   if (command === "sh") return { code: 0, stdout: (f().listing ?? []).map(e => (e.dir ? "d" : "f") + "\0" + e.name + "\0").join(""), stderr: "" };
+  if (command === "git" && f().git) {
+    if (args[0] === "rev-parse") return { code: 0, stdout: f().git.top + "\n", stderr: "" };
+    if (args.includes("status")) return { code: 0, stdout: f().git.status, stderr: "" };
+  }
   return { code: 128, stdout: "", stderr: "not a git repository" };
 }
 export async function readTextFile(path) {
