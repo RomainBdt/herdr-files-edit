@@ -134,6 +134,29 @@ nothing to undo there. To go back without removing the clone, run
 `node scripts/files-edit-layout.mjs restore <the clone's file>`: the clone shows Herdr's
 Files again, byte for byte as it was.
 
+### Or edit your own layout directly
+
+A layout you made or installed yourself (not one of Herdr's `main`, `terminals` and
+`win98`, which Herdr replaces on every start) can be switched in place, with no clone and
+no second layout to keep:
+
+```sh
+node scripts/files-edit-layout.mjs apply ~/.config/herdr-app/layouts/board.json
+```
+
+It makes the same one or two line change as above, in your layout's own file, and Herdr
+follows within a second. Back again, to the byte:
+
+```sh
+node scripts/files-edit-layout.mjs restore ~/.config/herdr-app/layouts/board.json
+```
+
+The cost is different from a clone's: the layout file itself is edited, so whatever
+rewrites that file can put Herdr's Files back. herdr-board's `install.sh` merges into
+`layouts/board.json`, so after updating it, check the Files panel and run `apply` again if
+it is Herdr's again. Keep a copy of the file if you want a restore that doesn't depend on
+the script. Use one route per layout: either edit it directly or clone it, not both.
+
 ## Limits
 
 - **Not yet seen running in Herdr's window.** What has been checked: the mod loads and
