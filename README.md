@@ -113,6 +113,11 @@ Herdr follows the file within a second. The panel keeps its id (`files`), so the
 bar's **Files** button, its key and the panel's place in the layout all work as before;
 the other panels, mods and the rest of the layout are not touched.
 
+What a clone costs: it is yours and is never updated. When a Herdr release, or a layout
+installer that merges into your layout (herdr-board's `install.sh` does for `board`),
+changes the layout you cloned from, the clone keeps the old one. To pick the change up,
+go back (below), update, and clone and apply again.
+
 ### Going back
 
 ```sh
@@ -132,8 +137,9 @@ Files again, byte for byte as it was.
 ## Limits
 
 - **Not yet seen running in Herdr's window.** What has been checked: the mod loads and
-  builds its first frame under `herdr-app check`; every call it makes type-checks against
-  Herdr's own `herdr.d.ts` and `gpui-kit.d.ts`; and `npm test` runs the real `main.js`
+  builds its first frame under `herdr-app check`; no call it makes is unknown to Herdr's
+  own `herdr.d.ts` and `gpui-kit.d.ts` (a TypeScript pass leaves only the color-string and
+  `font_family` warnings that Herdr's own Files mod has too); and `npm test` runs the real `main.js`
   against stand-ins for Herdr's API and a real folder on disk (saving, conflicts, drafts,
   right-click, line endings, read-only cases). What has not been seen: the panel on
   screen, the real editor taking keystrokes, the real right-click and clipboard.
@@ -145,9 +151,10 @@ Files again, byte for byte as it was.
   them; the back arrow and a change of folder keep or ask.
 - Writes happen only on this computer. A file in a space on another machine is shown
   read-only.
-- Tested on Windows only. Saving is Herdr's `writeTextFile`: it replaces the file
-  atomically, so a file that is a symbolic link or has special permissions behaves as
-  Herdr does, not specially here.
+- Only Windows has been used for the checks above (the tests and `herdr-app check`), and
+  nothing has been run in the Herdr window on any system. Saving is Herdr's
+  `writeTextFile`: it replaces the file atomically, so a file that is a symbolic link or
+  has special permissions behaves as Herdr does, not specially here.
 - The conflict check compares what the file holds with what the panel last read, so a
   change that happens to put back the same text is not a conflict.
 
